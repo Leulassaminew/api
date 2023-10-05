@@ -6,15 +6,10 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 app = Flask(__name__)
 
-columns = ['pop','city','lat','capacity','container','price','brand']
-
 with open("model.pkl","rb") as f:
     model_body = pickle.load(f)
 with open('scaler.pkl', 'rb') as file:
     scaler = pickle.load(file)
-@app.route('/'):
-def pri():
-    return "home"
 @app.route('/predict',methods=['POST'])
 def predict_Sales():
     data=request.get_json()
