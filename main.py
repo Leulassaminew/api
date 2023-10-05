@@ -12,20 +12,11 @@ with open("model.pkl","rb") as f:
     model_body = pickle.load(f)
 with open('scaler.pkl', 'rb') as file:
     scaler = pickle.load(file)
-@app.route('/')
-def hello():
-    response = {
-        'message': 'Hello'
-    }
-    return jsonify(response)
-@app.route('/api',methods=['GET'])
-def returnascii():
-    d={}
-    #inputchar = list(request.args['query'])
-    #answer = inputchar
-    json_data = unquote(request.args.get('query'))
-    decoded_data = json.loads(json_data)
-    my_list = decoded_data
+
+@app.route('/predict',methods=['POST'])
+def predict_Sales():
+    data=request.get_json()
+    my_list = data["list"]
     new_input=np.array([my_list])
     c= scaler.transform(new_input)
     reshaped_input = c.reshape(1, -1)
@@ -33,17 +24,6 @@ def returnascii():
     response = {'code':200,'status':'OK',
                 'result':str(res[0])}
     return jsonify(response)
-@app.route('/apipro',methods=['GET','POST'])
-def process_list():
-    data=request.json
-    decoded_data = json.loads(data)
-    my_list = decoded_data
-    new_input=np.array([my_list])
-    c= scaler.transform(new_input)
-    reshaped_input = c.reshape(1, -1)
-    res = model_body.predict(reshaped_input)
-    response = {'code':200,'status':'OK',
-                'result':str(res[0])}
-    return jsonify(response)
+
 if __name__ == "__main__":
     app.run()
