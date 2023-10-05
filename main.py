@@ -13,6 +13,7 @@ with open("model.pkl","rb") as f:
 with open('scaler.pkl', 'rb') as file:
     scaler = pickle.load(file)
 @app.route('/'):
+def pri():
     return "home"
 @app.route('/predict',methods=['POST'])
 def predict_Sales():
